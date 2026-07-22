@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --surface: #fcfcfb;
+    --card: #f4f3f0;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #7a7975;
+    --line: #e4e2dc;
+    --good: #0ca30c;
+    --warn: #fab219;
+    --critical: #d03b3b;
+    --tick-empty: #e4e2dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #1a1a19;
+      --card: #232322;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted: #8b8a83;
+      --line: #333330;
+      --tick-empty: #333330;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--surface);
+    color: var(--text-primary);
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 2.5rem 1rem 4rem;
+  }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 1.15rem; font-weight: 650; letter-spacing: -0.01em; }
+  .masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .checked { color: var(--text-muted); font-size: 0.8rem; }
+  .banner {
+    margin-top: 1rem; padding: 0.7rem 1rem; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 0.55rem;
+  }
+  .banner .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .banner.ok   { background: color-mix(in srgb, var(--good) 12%, var(--surface)); }
+  .banner.ok .dot { background: var(--good); }
+  .banner.bad  { background: color-mix(in srgb, var(--critical) 12%, var(--surface)); }
+  .banner.bad .dot { background: var(--critical); }
+  .banner.stale { background: color-mix(in srgb, var(--warn) 14%, var(--surface)); }
+  .banner.stale .dot { background: var(--warn); }
+  .group { margin-top: 1.6rem; }
+  .group h2 {
+    font-size: 0.8rem; font-weight: 650; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 0.5rem;
+  }
+  .card { background: var(--card); border-radius: 12px; overflow: hidden; }
+  .row {
+    padding: 0.7rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 1rem;
+    align-items: center;
+  }
+  .row + .row { border-top: 1px solid var(--line); }
+  .row .name { font-weight: 550; display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+  .row .name .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .up   .dot { background: var(--good); }
+  .down .dot { background: var(--critical); }
+  .state { font-size: 0.8rem; font-weight: 650; text-align: right; white-space: nowrap; }
+  .up   .state { color: var(--good); }
+  .down .state { color: var(--critical); }
+  .meta { grid-column: 1; color: var(--text-muted); font-size: 0.78rem; }
+  .meta .err { color: var(--critical); }
+  .strip-wrap { grid-column: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .strip { display: flex; gap: 2px; }
+  .strip i {
+    width: 5px; height: 14px; border-radius: 2px;
+    background: var(--tick-empty); display: block;
+  }
+  .strip i.u { background: var(--good); }
+  .strip i.d { background: var(--critical); }
+  .uptime { color: var(--text-muted); font-size: 0.72rem; }
+  footer { margin-top: 2.2rem; color: var(--text-muted); font-size: 0.78rem; text-align: center; }
+  footer a { color: inherit; }
+  @media (max-width: 480px) { .strip i { width: 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="masthead">
+    <h1>Pulse</h1>
+    <span class="checked" id="checked">loading…</span>
+  </div>
+  <div id="banner"></div>
+  <div id="groups"></div>
+  <footer>Checked every 30 minutes from GitHub Actions ·
+    <a href="https://github.com/goelarnav12/pulse">source</a></footer>
+</main>
+<script>
+const STRIP_TICKS = 48;            // ~24h at 30-min cadence
+const STALE_MS = 90 * 60 * 1000;   // no run for 3 cycles = the checker itself is broken
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function rel(iso) {
+  const mins = Math.round((Date.now() - Date.parse(iso)) / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return mins + " min ago";
+  const h = Math.round(mins / 60);
+  if (h < 48) return h + " h ago";
+  return Math.round(h / 24) + " d ago";
+}
+
+function strip(runs, id) {
+  const slice = runs.slice(-STRIP_TICKS);
+  const pad = STRIP_TICKS - slice.length;
+  let out = "";
+  for (let i = 0; i < pad; i++) out += "<i></i>";
+  for (const run of slice) {
+    const r = run.r[id];
+    out += r === undefined ? "<i></i>" : `<i class="${r[0] ? "u" : "d"}"></i>`;
+  }
+  return out;
+}
+
+function uptime(runs, id) {
+  let up = 0, total = 0;
+  for (const run of runs) {
+    const r = run.r[id];
+    if (r === undefined) continue;
+    total++; up += r[0];
+  }
+  if (!total) return "";
+  return (100 * up / total).toFixed(total >= 200 ? 2 : 1) + "% · 30 d";
+}
+
+async function load() {
+  const bust = "?t=" + Date.now();
+  const [status, history] = await Promise.all([
+    fetch("status.json" + bust).then(r => r.json()),
+    fetch("history.json" + bust).then(r => r.json()).catch(() => []),
+  ]);
+
+  document.getElementById("checked").textContent =
+    "checked " + rel(status.generatedAt);
+
+  const downs = status.targets.filter(t => !t.up);
+  const stale = Date.now() - Date.parse(status.generatedAt) > STALE_MS;
+  const banner = document.getElementById("banner");
+  if (stale) {
+    banner.innerHTML = `<div class="banner stale"><span class="dot"></span>
+      ⚠ Checker hasn’t run since ${rel(status.generatedAt)} — results below are stale</div>`;
+  } else if (downs.length) {
+    banner.innerHTML = `<div class="banner bad"><span class="dot"></span>
+      ✕ ${downs.length} of ${status.targets.length} checks failing</div>`;
+  } else {
+    banner.innerHTML = `<div class="banner ok"><span class="dot"></span>
+      ✓ All systems up</div>`;
+  }
+
+  const groups = new Map();
+  for (const t of status.targets) {
+    if (!groups.has(t.group)) groups.set(t.group, []);
+    groups.get(t.group).push(t);
+  }
+
+  let html = "";
+  for (const [group, targets] of groups) {
+    html += `<section class="group"><h2>${esc(group)}</h2><div class="card">`;
+    for (const t of targets) {
+      const cls = t.up ? "up" : "down";
+      const state = t.up ? "✓ Up" : "✕ Down";
+      const meta = t.up
+        ? `${t.ms} ms`
+        : `<span class="err">${esc(t.error ?? "HTTP " + t.code)}</span>`;
+      html += `<div class="row ${cls}">
+        <span class="name"><span class="dot"></span>${esc(t.name)}</span>
+        <span class="state">${state}</span>
+        <span class="meta">${meta}</span>
+        <span class="strip-wrap">
+          <span class="strip">${strip(history, t.id)}</span>
+          <span class="uptime">${uptime(history, t.id)}</span>
+        </span>
+      </div>`;
+    }
+    html += `</div></section>`;
+  }
+  document.getElementById("groups").innerHTML = html;
+}
+
+load().catch(err => {
+  document.getElementById("banner").innerHTML =
+    `<div class="banner stale"><span class="dot"></span>⚠ Couldn’t load status.json — ${esc(err.message)}</div>`;
+  document.getElementById("checked").textContent = "";
+});
+setInterval(() => load().catch(() => {}), 5 * 60 * 1000);
+</script>
+</body>
+</html>
