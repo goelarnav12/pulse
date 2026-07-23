@@ -48,11 +48,5 @@
     "group": "Tally",
     "name": "API \u2014 Cloudflare Worker",
     "url": "https://expense-tracker-api.goelarnav12.workers.dev/"
-  },
-  {
-    "id": "alert-test",
-    "group": "Test",
-    "name": "Deliberate failure (delete me)",
-    "url": "https://pulse-alert-test.invalid"
   }
 ]
