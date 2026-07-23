@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-23T05:04:23.187Z",
+  "generatedAt": "2026-07-23T05:05:45.919Z",
   "targets": [
     {
       "id": "poker-vercel",
@@ -7,7 +7,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 198
+      "ms": 175
     },
     {
       "id": "poker-pages",
@@ -15,7 +15,7 @@
       "name": "App — GitHub Pages",
       "up": true,
       "code": 200,
-      "ms": 147
+      "ms": 115
     },
     {
       "id": "poker-db",
@@ -23,7 +23,7 @@
       "name": "Database — Supabase",
       "up": true,
       "code": 200,
-      "ms": 630
+      "ms": 911
     },
     {
       "id": "ironlog-vercel",
@@ -31,7 +31,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 268
+      "ms": 202
     },
     {
       "id": "ironlog-db",
@@ -39,7 +39,7 @@
       "name": "Database — Supabase",
       "up": true,
       "code": 200,
-      "ms": 371
+      "ms": 1242
     },
     {
       "id": "tally-vercel",
@@ -47,7 +47,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 329
+      "ms": 247
     },
     {
       "id": "tally-api",
@@ -55,17 +55,7 @@
       "name": "API — Cloudflare Worker",
       "up": true,
       "code": 200,
-      "ms": 168
-    },
-    {
-      "id": "alert-test",
-      "group": "Test",
-      "name": "Deliberate failure (delete me)",
-      "up": false,
-      "code": null,
-      "ms": 8,
-      "error": "ENOTFOUND",
-      "retried": true
+      "ms": 114
     }
   ]
 }
