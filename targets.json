@@ -2,43 +2,57 @@
   {
     "id": "poker-vercel",
     "group": "Poker Ledger",
-    "name": "App — Vercel",
+    "name": "App \u2014 Vercel",
     "url": "https://poker-ledger-phi.vercel.app"
   },
   {
     "id": "poker-pages",
     "group": "Poker Ledger",
-    "name": "App — GitHub Pages",
+    "name": "App \u2014 GitHub Pages",
     "url": "https://goelarnav12.github.io/Poker-Ledger/"
   },
   {
     "id": "poker-db",
     "group": "Poker Ledger",
-    "name": "Database — Supabase",
-    "supabase": { "urlEnv": "POKER_SUPABASE_URL", "keyEnv": "POKER_SUPABASE_KEY", "table": "sessions" }
+    "name": "Database \u2014 Supabase",
+    "supabase": {
+      "urlEnv": "POKER_SUPABASE_URL",
+      "keyEnv": "POKER_SUPABASE_KEY",
+      "table": "sessions"
+    }
   },
   {
     "id": "ironlog-vercel",
     "group": "Iron Log",
-    "name": "App — Vercel",
+    "name": "App \u2014 Vercel",
     "url": "https://iron-log-two-rho.vercel.app"
   },
   {
     "id": "ironlog-db",
     "group": "Iron Log",
-    "name": "Database — Supabase",
-    "supabase": { "urlEnv": "IRONLOG_SUPABASE_URL", "keyEnv": "IRONLOG_SUPABASE_KEY", "table": "exercises" }
+    "name": "Database \u2014 Supabase",
+    "supabase": {
+      "urlEnv": "IRONLOG_SUPABASE_URL",
+      "keyEnv": "IRONLOG_SUPABASE_KEY",
+      "table": "exercises"
+    }
   },
   {
     "id": "tally-vercel",
     "group": "Tally",
-    "name": "App — Vercel",
+    "name": "App \u2014 Vercel",
     "url": "https://expense-tracker-arnav09.vercel.app"
   },
   {
     "id": "tally-api",
     "group": "Tally",
-    "name": "API — Cloudflare Worker",
+    "name": "API \u2014 Cloudflare Worker",
     "url": "https://expense-tracker-api.goelarnav12.workers.dev/"
+  },
+  {
+    "id": "alert-test",
+    "group": "Test",
+    "name": "Deliberate failure (delete me)",
+    "url": "https://pulse-alert-test.invalid"
   }
 ]
