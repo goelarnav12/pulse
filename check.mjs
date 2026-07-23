@@ -53,15 +53,18 @@ async function check(t) {
   const req = requestFor(t);
   // A missing secret is reported as down, never silently skipped — a
   // misconfigured keep-alive that looks green is the worst failure mode.
+  // The page links each row here: the target's own URL, or an explicit
+  // `link` (Supabase rows link to their dashboard, not the REST endpoint).
+  const link = t.link ?? t.url ?? null;
   if (req.missing) {
-    return { id: t.id, group: t.group, name: t.name, up: false, code: null, ms: null, error: req.missing };
+    return { id: t.id, group: t.group, name: t.name, link, up: false, code: null, ms: null, error: req.missing };
   }
   let result = await attempt(req);
   if (!result.up) {
     await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
     result = { ...(await attempt(req)), retried: true };
   }
-  return { id: t.id, group: t.group, name: t.name, ...result };
+  return { id: t.id, group: t.group, name: t.name, link, ...result };
 }
 
 const results = await Promise.all(targets.map(check));
