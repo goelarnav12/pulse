@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T22:45:19.236Z",
+  "generatedAt": "2026-07-23T05:02:36.711Z",
   "targets": [
     {
       "id": "poker-vercel",
@@ -7,7 +7,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 213
+      "ms": 390
     },
     {
       "id": "poker-pages",
@@ -15,7 +15,7 @@
       "name": "App — GitHub Pages",
       "up": true,
       "code": 200,
-      "ms": 106
+      "ms": 138
     },
     {
       "id": "poker-db",
@@ -23,7 +23,7 @@
       "name": "Database — Supabase",
       "up": true,
       "code": 200,
-      "ms": 491
+      "ms": 1617
     },
     {
       "id": "ironlog-vercel",
@@ -31,7 +31,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 177
+      "ms": 322
     },
     {
       "id": "ironlog-db",
@@ -39,7 +39,7 @@
       "name": "Database — Supabase",
       "up": true,
       "code": 200,
-      "ms": 559
+      "ms": 1685
     },
     {
       "id": "tally-vercel",
@@ -47,7 +47,7 @@
       "name": "App — Vercel",
       "up": true,
       "code": 200,
-      "ms": 176
+      "ms": 349
     },
     {
       "id": "tally-api",
@@ -55,7 +55,7 @@
       "name": "API — Cloudflare Worker",
       "up": true,
       "code": 200,
-      "ms": 212
+      "ms": 303
     }
   ]
 }
