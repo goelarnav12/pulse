@@ -19,6 +19,18 @@ Every 30 minutes a GitHub Actions cron runs `check.mjs`, which:
 and renders the green/red page with a 24 h tick strip and 30-day uptime per
 target.
 
+**The tick strip carries two readings.** Colour is up or down; **bar height is
+how long the check took**. So a red bar is an outage and a rising run of green
+ones is the thing that usually precedes one. Each row also prints the current
+response time next to its own median and p95 — and turns the current figure
+amber when it is more than double that target's median (and at least 250 ms
+clear of it). Judged per target on purpose: 500 ms is unremarkable for a
+Supabase select and terrible for a static page, so one fixed threshold would
+either cry wolf or never fire.
+
+Bars are scaled to the target's p95 rather than its maximum, so a single
+15-second timeout doesn't flatten a fortnight of normal checks into nothing.
+
 ## What's watched
 
 See `targets.json` — Poker Ledger (Vercel + GitHub Pages + Supabase), Iron Log

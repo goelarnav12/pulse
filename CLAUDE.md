@@ -18,6 +18,16 @@ Read `README.md` first. What matters when editing:
   noise on them if you do (the workflow does `git pull --rebase` before push).
 - History entries are keyed by target `id` in `targets.json`. Renaming an id
   orphans that target's history; add new targets with new ids instead.
+- **The history format already carried response times** — an entry is
+  `[up01, ms|null]` — so latency is a rendering concern, not a collection one.
+  `check.mjs` did not need to change for it. `ms` is null when a check never
+  ran (a missing secret reports down with no timing); `latency()` SKIPS those
+  rather than counting them as zero, which would drag the median toward a
+  speed nothing achieved.
+- **Slow is relative to the target's own median**, never a fixed threshold.
+  500 ms is fine for a Supabase select and awful for a static page. Same
+  reasoning behind scaling the bars to p95 rather than max: one timeout must
+  not flatten the rest of the strip.
 - The repo is **public** (free GitHub Pages requires it). Nothing secret goes
   in it — the four Supabase values stay in Actions secrets even though anon
   keys are public by design.
