@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T22:27:40.956Z",
+  "generatedAt": "2026-09-12T05:30:18.487Z",
   "targets": [
     {
       "id": "poker-vercel",
@@ -8,7 +8,7 @@
       "link": "https://poker-ledger-phi.vercel.app",
       "up": true,
       "code": 200,
-      "ms": 311
+      "ms": 237
     },
     {
       "id": "poker-pages",
@@ -17,7 +17,7 @@
       "link": "https://goelarnav12.github.io/Poker-Ledger/",
       "up": true,
       "code": 200,
-      "ms": 162
+      "ms": 200
     },
     {
       "id": "poker-db",
@@ -26,7 +26,7 @@
       "link": "https://supabase.com/dashboard/project/lkizapostyywexkmfjts",
       "up": true,
       "code": 200,
-      "ms": 1357
+      "ms": 1297
     },
     {
       "id": "ironlog-vercel",
@@ -35,7 +35,7 @@
       "link": "https://iron-log-two-rho.vercel.app",
       "up": true,
       "code": 200,
-      "ms": 189
+      "ms": 360
     },
     {
       "id": "ironlog-db",
@@ -44,7 +44,7 @@
       "link": "https://supabase.com/dashboard/project/scqfzjmccnfolnadolqe",
       "up": true,
       "code": 200,
-      "ms": 1374
+      "ms": 1193
     },
     {
       "id": "tally-vercel",
@@ -53,7 +53,7 @@
       "link": "https://expense-tracker-arnav09.vercel.app",
       "up": true,
       "code": 200,
-      "ms": 322
+      "ms": 269
     },
     {
       "id": "tally-api",
@@ -62,7 +62,7 @@
       "link": "https://expense-tracker-api.goelarnav12.workers.dev/",
       "up": true,
       "code": 200,
-      "ms": 208
+      "ms": 198
     }
   ]
 }
